@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import './App.css';
 
 // Component imports
+import TaskList from './components/TaskList';
 import InputField from './components/InputField';
 import { Task } from './model';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 // the | means or 
 // any type can be assigned to any variable
@@ -156,6 +158,7 @@ import { Task } from './model';
 const App: React.FC = () => {
   const [task, setTask] = useState<string>("");
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [CompletedTasks, setCompletedTasks] = useState<Task[]>([]);
 
 // handleAdd is a function that takes no arguments and returns nothing
 // event type in React Typescript is React.FormEvent<HTMLFormElement> or
@@ -178,17 +181,62 @@ const App: React.FC = () => {
   console.log(task)
   // passed*
   //* Here we are passing the task variable as a prop to the InputField component *//
+
+  const onDragEnd = (result: DropResult) => {
+    const {destination, source} = result;
+
+    console.log(result);
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    
+    let add;
+    let active = tasks;
+    let complete = CompletedTasks;
+    // Source Logic here 
+    if (source.droppableId ==="TaskList") {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    } else {
+      add = complete[source.index];
+      complete.splice(source.index, 1);
+    }
+
+    // Destination Logic here
+    if (destination.droppableId === "TaskList") {
+      active.splice(destination.index, 0, add);
+    } else {
+      complete.splice(destination.index, 0, add);
+    }
+    // Update State 
+    setCompletedTasks(complete);
+    setTasks(active);
+  };
+  // Here we are passing the tasks variable as a prop to the TaskList component 
+  // onDragEnd is a function that takes a result argument of type DropResult and returns nothing
+  
   return (
-    <div className="App">
-      <span className="heading">Task Management</span>
-      <InputField task={task} setTask={setTask} handleAdd={handleAdd} />
-      {/* <TaskList /> */}
-      {tasks.map((t) => {
-        <li>{t.task}</li>
-      })}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="App">
+        <span className="heading">Daily Task List</span>
+        <InputField task={task} setTask={setTask} handleAdd={handleAdd} />
+        <TaskList
+          tasks={tasks}
+          setTasks={setTasks}
+          CompletedTasks={CompletedTasks}
+          setCompletedTasks={setCompletedTasks}
+        />
+      </div>
+    </DragDropContext>
   );
 };
 
 export default App;
-

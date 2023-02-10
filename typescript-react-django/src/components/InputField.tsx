@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef} from 'react';
 
 // Css Focus is used to style the input box when it is clicked on
 // Css onset is used to style the input box when it is not clicked on
@@ -36,19 +36,31 @@ interface Props {
 // e.target.value is the value of the input box
 
 const InputField: React.FC<Props> = ({task, setTask, handleAdd}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // button is disabled if the input box is empty
+  // inputRef.current?.blur() is used to blur the input box when the form is submitted
   return (
-    <div>
-      < form className='input' onSubmit={(e) => handleAdd(e)}>
-        <input value={task}
-            className='input__box'
-            onChange={(e) => setTask(e.target.value)} 
-            type='text' 
-            placeholder='Add a task' />
-        <button className="input_submit" type="submit">Add</button>
-        </form>
-    </div>
-  )
-}
+    <form
+      className="input"
+      onSubmit={(e) => {
+        handleAdd(e);
+        inputRef.current?.blur();
+      }}
+    >
+      <input
+        type="text"
+        placeholder="Enter a Task"
+        value={task}
+        ref={inputRef}
+        onChange={(e) => setTask(e.target.value)}
+        className="input__box"
+      />
+      <button type="submit" className="input_submit">
+        GO
+      </button>
+    </form>
+  );
+};
 
 export default InputField;
-
