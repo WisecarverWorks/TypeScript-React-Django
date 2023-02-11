@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task } from '../model';
+import { Task } from './model/model';
 import SingleTask from './SingleTask';
 import { Droppable } from 'react-beautiful-dnd';
 
@@ -19,8 +19,8 @@ interface props {
 const TaskList: React.FC<props> = ({
     tasks, 
     setTasks, 
-    setCompletedTasks, 
     CompletedTasks, 
+    setCompletedTasks, 
     }) => {
     // innerRef is a reference to the div that is being rendered
     // snapshot is an object that contains information about the state of the component
@@ -32,12 +32,12 @@ const TaskList: React.FC<props> = ({
     // The setTasks is a function that is used to set the tasks array
     return (
     <div className="container">
-        <Droppable droppableId="TasksList">
+        <Droppable droppableId="TaskList">
         {(provided, snapshot) => (
             <div
-            className={`tasks ${snapshot.isDraggingOver ? "dragactive" : ""}`}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
+                className={`tasks ${snapshot.isDraggingOver ? "dragactive" : ""}`}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
             >
             <span className="tasks__heading">Active Tasks</span>
             {tasks?.map((task, index) => (
@@ -56,23 +56,23 @@ const TaskList: React.FC<props> = ({
         <Droppable droppableId="TasksRemove">
         {(provided, snapshot) => (
             <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={`tasks  ${
-                snapshot.isDraggingOver ? "dragcomplete" : "remove"
-            }`}
-            >
-            <span className="tasks__heading">Completed Tasks</span>
-            {CompletedTasks?.map((task, index) => (
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={`tasks  ${
+                    snapshot.isDraggingOver ? "dragcomplete" : "remove"
+                }`}
+                >
+                <span className="tasks__heading">Completed Tasks</span>
+                {CompletedTasks?.map((task, index) => (
                 <SingleTask
-                index={index}
-                tasks={CompletedTasks}
-                task={task}
-                key={task.id}
-                setTasks={setCompletedTasks}
+                    index={index}
+                    tasks={CompletedTasks}
+                    task={task}
+                    key={task.id}
+                    setTasks={setCompletedTasks}
                 />
-            ))}
-            {provided.placeholder}
+                ))}
+                {provided.placeholder}
             </div>
         )}
         </Droppable>

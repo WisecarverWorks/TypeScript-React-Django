@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Task } from '../model';
-import { Draggable } from 'react-beautiful-dnd';
+import React, { useState, useEffect} from 'react';
+import { useRef } from 'react';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { MdDone } from 'react-icons/md';
+import { Task } from './model/model';
+import { Draggable } from 'react-beautiful-dnd';
 
 
 const SingleTask: React.FC<{
@@ -11,7 +12,7 @@ const SingleTask: React.FC<{
     tasks: Array<Task>;
     // React.SetStateAction is a generic type that takes in a type and returns a type
     setTasks: React.Dispatch<React.SetStateAction<Array<Task>>>;
-}> = ({index, task, tasks, setTasks}) => {
+  }> = ({index, task, tasks, setTasks}) => {
     const [edit, setEdit] = useState<boolean>(false);
     const [editTask, setEditTask] = useState<string>(task.task);
     // useRef is a hook that returns a mutable ref object whose .current property is initialized to the passed argument (initialValue).
@@ -26,7 +27,7 @@ const SingleTask: React.FC<{
     const handleEdit = (e: React.FormEvent, id: number) => {
         e.preventDefault();
         setTasks(
-            tasks.map((task: Task) => (task.id === id ? {...task, task: editTask} : task))
+            tasks.map((task) => (task.id === id ? {...task, task: editTask} : task))
         );
         setEdit(false);
     };
@@ -39,7 +40,7 @@ const SingleTask: React.FC<{
     // The id is the id of the task that is to be marked as done
     const handleDone = (id: number) => {
         setTasks(
-            tasks.map((task: Task) => (task.id === id ? {...task, completed: !task.isDone} : task))
+            tasks.map((task) => (task.id === id ? {...task, isDone: !task.isDone} : task))
         );
     };
 

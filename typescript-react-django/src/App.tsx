@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import './App.css';
 
 // Component imports
-import TaskList from './components/TaskList';
 import InputField from './components/InputField';
-import { Task } from './model';
+import TaskList from './components/TaskList';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { Task } from './components/model/model';
 
 // the | means or 
 // any type can be assigned to any variable
@@ -158,7 +158,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 const App: React.FC = () => {
   const [task, setTask] = useState<string>("");
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [CompletedTasks, setCompletedTasks] = useState<Task[]>([]);
+  const [CompletedTasks, setCompletedTasks] = useState<Array<Task>>([]);
 
 // handleAdd is a function that takes no arguments and returns nothing
 // event type in React Typescript is React.FormEvent<HTMLFormElement> or
@@ -177,8 +177,8 @@ const App: React.FC = () => {
     }
   };
 
-  console.log(tasks)
-  console.log(task)
+  // console.log(tasks)
+  // console.log(task)
   // passed*
   //* Here we are passing the task variable as a prop to the InputField component *//
 
